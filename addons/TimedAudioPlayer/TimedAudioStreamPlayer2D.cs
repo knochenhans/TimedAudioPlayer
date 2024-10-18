@@ -7,6 +7,8 @@ public partial class TimedAudioStreamPlayer2D : AudioStreamPlayer2D
 {
 	[Export] public TimedAudioStreamPlayer2DResource TimedAudioStreamPlayer2DResource { get; set; }
 
+	Dictionary<string, Array<AudioStream>> soundSets = new();
+
 	bool _isLooping = false;
 
 	string currentSoundSet = "default";
@@ -81,7 +83,7 @@ public partial class TimedAudioStreamPlayer2D : AudioStreamPlayer2D
 		_isLooping = false;
 	}
 
-	public void SetStreams(Godot.Collections.Array<AudioStream> streams)
+	public void SetStreams(Array<AudioStream> streams)
 	{
 		var randomizer = new AudioStreamRandomizer();
 		foreach (var stream in streams)
@@ -94,42 +96,42 @@ public partial class TimedAudioStreamPlayer2D : AudioStreamPlayer2D
 
 	public void UpdateSoundSet(string soundSet)
 	{
-		if (TimedAudioStreamPlayer2DResource.SoundSets.ContainsKey(soundSet))
-			SetStreams(TimedAudioStreamPlayer2DResource.SoundSets[CurrentSoundSet]);
+		if (soundSets.ContainsKey(soundSet))
+			SetStreams(soundSets[CurrentSoundSet]);
 		else
-			GD.PrintErr($"Sound set {soundSet} not found in {nameof(TimedAudioStreamPlayer2DResource)}");
+			GD.PrintErr($"Sound set {soundSet} not found in local soundSets");
 	}
 
-	public void AddSoundSet(string soundSet, Godot.Collections.Array<AudioStream> streams, bool replace = false)
+	public void AddSoundSet(string soundSet, Array<AudioStream> streams, bool replace = false)
 	{
-		if (TimedAudioStreamPlayer2DResource.SoundSets.ContainsKey(soundSet))
+		if (soundSets.ContainsKey(soundSet))
 		{
 			if (replace)
-				TimedAudioStreamPlayer2DResource.SoundSets[soundSet] = streams;
+				soundSets[soundSet] = streams;
 			else
 				foreach (var stream in streams)
-					TimedAudioStreamPlayer2DResource.SoundSets[soundSet].Add(stream);
+					soundSets[soundSet].Add(stream);
 		}
 		else
-			TimedAudioStreamPlayer2DResource.SoundSets.Add(soundSet, streams);
+			soundSets.Add(soundSet, streams);
 	}
 
 	public void AddSoundSetsFromRaw(Array<AudioStream> streams, bool replace = false)
 	{
-		Dictionary<string, Array<AudioStream>> soundSets = new();
+		Dictionary<string, Array<AudioStream>> tempSoundSets = new();
 
 		foreach (var stream in streams)
 		{
 			var prefix = stream.ResourcePath.Split("/").Last<string>().Split(".").First<string>().Split("_").First<string>();
 
-			if (!soundSets.ContainsKey(prefix))
-				soundSets[prefix] = new Array<AudioStream>();
+			if (!tempSoundSets.ContainsKey(prefix))
+				tempSoundSets[prefix] = new Array<AudioStream>();
 
-			GD.Print($"Adding sound set \"{prefix}\" for {nameof(TimedAudioStreamPlayer2DResource)}");
-			soundSets[prefix].Add(stream);
+			GD.Print($"Adding sound set \"{prefix}\" to local soundSets");
+			tempSoundSets[prefix].Add(stream);
 		}
 
-		foreach (var soundSet in soundSets)
+		foreach (var soundSet in tempSoundSets)
 			AddSoundSet(soundSet.Key, soundSet.Value, replace);
 	}
 }
