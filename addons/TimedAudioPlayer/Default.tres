@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://cp44nsptjeflt"]
+
+[ext_resource type="Script" path="res://addons/TimedAudioPlayer/TimedAudioStreamPlayer2DResource.cs" id="1_5vulh"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_5vulh")
+MinWaitTime = 0.0
+PlayOnLoopStart = true
+Autoplay = false
+Pitch = 1.0
+SoundSets = {}
+RandomWaitTime = 0.0
+RandomPitchAdded = 1.1
+RandomVolumeAdded = 1.0
