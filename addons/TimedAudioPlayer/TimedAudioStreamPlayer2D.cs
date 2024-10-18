@@ -27,6 +27,8 @@ public partial class TimedAudioStreamPlayer2D : AudioStreamPlayer2D
 
 	Timer Timer => GetNode<Timer>("Timer");
 
+	AudioStreamRandomizer queuedStream = null;
+
 	public override void _Ready()
 	{
 		Finished += OnFinished;
@@ -91,7 +93,8 @@ public partial class TimedAudioStreamPlayer2D : AudioStreamPlayer2D
 		PitchScale = TimedAudioStreamPlayer2DResource.Pitch;
 		randomizer.RandomPitch = TimedAudioStreamPlayer2DResource.RandomPitchAdded;
 		randomizer.RandomVolumeOffsetDb = TimedAudioStreamPlayer2DResource.RandomVolumeAdded;
-		Stream = randomizer;
+
+		queuedStream = randomizer;
 	}
 
 	public void UpdateSoundSet(string soundSet)
@@ -133,5 +136,16 @@ public partial class TimedAudioStreamPlayer2D : AudioStreamPlayer2D
 
 		foreach (var soundSet in tempSoundSets)
 			AddSoundSet(soundSet.Key, soundSet.Value, replace);
+	}
+
+	public void Play()
+	{
+		if (queuedStream != null)
+		{
+			Stream = queuedStream;
+			queuedStream = null;
+		}
+
+		base.Play();
 	}
 }
