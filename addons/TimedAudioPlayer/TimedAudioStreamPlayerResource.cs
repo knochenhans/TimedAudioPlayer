@@ -1,7 +1,7 @@
 using Godot;
 using Godot.Collections;
 
-public partial class TimedAudioStreamPlayer2DResource : Resource
+public partial class TimedAudioStreamPlayerResource : Resource
 {
     [Export] public double MinWaitTime { get; set; } = 0;
     [Export] public bool PlayOnLoopStart { get; set; } = true;

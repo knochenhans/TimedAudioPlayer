@@ -5,7 +5,7 @@ using System.Linq;
 
 public partial class TimedAudioStreamPlayer2D : AudioStreamPlayer2D
 {
-	[Export] public TimedAudioStreamPlayer2DResource TimedAudioStreamPlayer2DResource { get; set; }
+	[Export] public TimedAudioStreamPlayerResource TimedAudioStreamPlayerResource { get; set; }
 
 	public enum ActivityStateEnum
 	{
@@ -53,18 +53,18 @@ public partial class TimedAudioStreamPlayer2D : AudioStreamPlayer2D
 		Finished += OnFinished;
 		Timer.Timeout += OnTimeout;
 
-		if (TimedAudioStreamPlayer2DResource.SoundSets.Count > 0)
-			if (TimedAudioStreamPlayer2DResource.SoundSets.ContainsKey(CurrentSoundSet))
-				if (TimedAudioStreamPlayer2DResource.SoundSets[CurrentSoundSet].Count > 0)
-					SetStreams(TimedAudioStreamPlayer2DResource.SoundSets[CurrentSoundSet]);
+		if (TimedAudioStreamPlayerResource.SoundSets.Count > 0)
+			if (TimedAudioStreamPlayerResource.SoundSets.ContainsKey(CurrentSoundSet))
+				if (TimedAudioStreamPlayerResource.SoundSets[CurrentSoundSet].Count > 0)
+					SetStreams(TimedAudioStreamPlayerResource.SoundSets[CurrentSoundSet]);
 
-		if (TimedAudioStreamPlayer2DResource.Autoplay)
+		if (TimedAudioStreamPlayerResource.Autoplay)
 			StartLoop();
 	}
 
 	public void SetRandomTime()
 	{
-		Timer.WaitTime = new Random().NextDouble() * TimedAudioStreamPlayer2DResource.RandomWaitTime + TimedAudioStreamPlayer2DResource.MinWaitTime;
+		Timer.WaitTime = new Random().NextDouble() * TimedAudioStreamPlayerResource.RandomWaitTime + TimedAudioStreamPlayerResource.MinWaitTime;
 	}
 
 	public void OnTimeout()
@@ -75,7 +75,7 @@ public partial class TimedAudioStreamPlayer2D : AudioStreamPlayer2D
 
 	public void OnFinished()
 	{
-		if (TimedAudioStreamPlayer2DResource.RandomWaitTime == 0 && TimedAudioStreamPlayer2DResource.MinWaitTime == 0)
+		if (TimedAudioStreamPlayerResource.RandomWaitTime == 0 && TimedAudioStreamPlayerResource.MinWaitTime == 0)
 		{
 			if (_isLooping)
 				Play();
@@ -90,7 +90,7 @@ public partial class TimedAudioStreamPlayer2D : AudioStreamPlayer2D
 	public void StartLoop()
 	{
 		_isLooping = true;
-		if (TimedAudioStreamPlayer2DResource.PlayOnLoopStart)
+		if (TimedAudioStreamPlayerResource.PlayOnLoopStart)
 			Play();
 		else
 		{
@@ -109,9 +109,9 @@ public partial class TimedAudioStreamPlayer2D : AudioStreamPlayer2D
 		var randomizer = new AudioStreamRandomizer();
 		foreach (var stream in streams)
 			randomizer.AddStream(-1, stream);
-		PitchScale = TimedAudioStreamPlayer2DResource.Pitch;
-		randomizer.RandomPitch = TimedAudioStreamPlayer2DResource.RandomPitchAdded;
-		randomizer.RandomVolumeOffsetDb = TimedAudioStreamPlayer2DResource.RandomVolumeAdded;
+		PitchScale = TimedAudioStreamPlayerResource.Pitch;
+		randomizer.RandomPitch = TimedAudioStreamPlayerResource.RandomPitchAdded;
+		randomizer.RandomVolumeOffsetDb = TimedAudioStreamPlayerResource.RandomVolumeAdded;
 
 		queuedStream = randomizer;
 	}
