@@ -1,6 +1,8 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://dv6mhky5oske2"]
+[gd_resource type="Resource" load_steps=4 format=3 uid="uid://dv6mhky5oske2"]
 
-[ext_resource type="Script" path="res://addons/TimedAudioPlayer/TimedAudioStreamPlayer2DResource.cs" id="1_im3w0"]
+[ext_resource type="AudioStream" uid="uid://dh3fegpyocogt" path="res://resources/sounds/water-001.wav" id="1_463vq"]
+[ext_resource type="Script" path="res://addons/TimedAudioPlayer/TimedAudioStreamPlayerResource.cs" id="1_im3w0"]
+[ext_resource type="AudioStream" uid="uid://dlh3yocwhdrs3" path="res://resources/sounds/water-002.wav" id="2_0611x"]
 
 [resource]
 resource_local_to_scene = true
@@ -9,7 +11,9 @@ MinWaitTime = 2.0
 PlayOnLoopStart = true
 Autoplay = true
 Pitch = 1.0
-SoundSets = {}
-RandomWaitTime = 0.0
+SoundSets = {
+"default": [ExtResource("1_463vq"), ExtResource("2_0611x")]
+}
+RandomWaitTime = 3.0
 RandomPitchAdded = 1.2
-RandomVolumeAdded = 3.0
+RandomVolumeAdded = 1.0

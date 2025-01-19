@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://ghmth21vqnw2"]
+
+[ext_resource type="Script" path="res://addons/TimedAudioPlayer/TimedAudioStreamPlayer3D.cs" id="1_36atd"]
+[ext_resource type="Resource" uid="uid://cp44nsptjeflt" path="res://addons/TimedAudioPlayer/Default.tres" id="2_mpccp"]
+
+[node name="TimedAudioStreamPlayer3D" type="AudioStreamPlayer3D"]
+script = ExtResource("1_36atd")
+TimedAudioStreamPlayer3DResource = ExtResource("2_mpccp")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
