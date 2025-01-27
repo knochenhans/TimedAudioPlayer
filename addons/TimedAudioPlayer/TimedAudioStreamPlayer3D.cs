@@ -53,18 +53,22 @@ public partial class TimedAudioStreamPlayer3D : AudioStreamPlayer3D
 		Finished += OnFinished;
 		Timer.Timeout += OnTimeout;
 
-		if (TimedAudioStreamPlayerResource.SoundSets.Count > 0)
-			if (TimedAudioStreamPlayerResource.SoundSets.ContainsKey(CurrentSoundSet))
-				if (TimedAudioStreamPlayerResource.SoundSets[CurrentSoundSet].Count > 0)
-					SetStreams(TimedAudioStreamPlayerResource.SoundSets[CurrentSoundSet]);
+		if (TimedAudioStreamPlayerResource != null)
+		{
+			if (TimedAudioStreamPlayerResource.SoundSets.Count > 0)
+				if (TimedAudioStreamPlayerResource.SoundSets.ContainsKey(CurrentSoundSet))
+					if (TimedAudioStreamPlayerResource.SoundSets[CurrentSoundSet].Count > 0)
+						SetStreams(TimedAudioStreamPlayerResource.SoundSets[CurrentSoundSet]);
 
-		if (TimedAudioStreamPlayerResource.Autoplay)
-			StartLoop();
+			if (TimedAudioStreamPlayerResource.Autoplay)
+				StartLoop();
+		}
 	}
 
 	public void SetRandomTime()
 	{
-		Timer.WaitTime = new Random().NextDouble() * TimedAudioStreamPlayerResource.RandomWaitTime + TimedAudioStreamPlayerResource.MinWaitTime;
+		if (TimedAudioStreamPlayerResource != null)
+			Timer.WaitTime = new Random().NextDouble() * TimedAudioStreamPlayerResource.RandomWaitTime + TimedAudioStreamPlayerResource.MinWaitTime;
 	}
 
 	public void OnTimeout()
@@ -90,8 +94,11 @@ public partial class TimedAudioStreamPlayer3D : AudioStreamPlayer3D
 	public void StartLoop()
 	{
 		_isLooping = true;
-		if (TimedAudioStreamPlayerResource.PlayOnLoopStart)
-			Play();
+		if (TimedAudioStreamPlayerResource != null)
+		{
+			if (TimedAudioStreamPlayerResource.PlayOnLoopStart)
+				Play();
+		}
 		else
 		{
 			SetRandomTime();
@@ -109,9 +116,13 @@ public partial class TimedAudioStreamPlayer3D : AudioStreamPlayer3D
 		var randomizer = new AudioStreamRandomizer();
 		foreach (var stream in streams)
 			randomizer.AddStream(-1, stream);
-		PitchScale = TimedAudioStreamPlayerResource.Pitch;
-		randomizer.RandomPitch = TimedAudioStreamPlayerResource.RandomPitchAdded;
-		randomizer.RandomVolumeOffsetDb = TimedAudioStreamPlayerResource.RandomVolumeAdded;
+
+		if (TimedAudioStreamPlayerResource != null)
+		{
+			PitchScale = TimedAudioStreamPlayerResource.Pitch;
+			randomizer.RandomPitch = TimedAudioStreamPlayerResource.RandomPitchAdded;
+			randomizer.RandomVolumeOffsetDb = TimedAudioStreamPlayerResource.RandomVolumeAdded;
+		}
 
 		queuedStream = randomizer;
 	}
