@@ -53,10 +53,16 @@ public partial class TimedAudioStreamPlayer2D : AudioStreamPlayer2D
 		Finished += OnFinished;
 		Timer.Timeout += OnTimeout;
 
+		if (TimedAudioStreamPlayerResource == null)
+		{
+			Logger.Log("TimedAudioStreamPlayerResource is null", Logger.LogTypeEnum.Error);
+			return;
+		}
+
 		if (TimedAudioStreamPlayerResource.SoundSets.Count > 0)
-			if (TimedAudioStreamPlayerResource.SoundSets.ContainsKey(CurrentSoundSet))
-				if (TimedAudioStreamPlayerResource.SoundSets[CurrentSoundSet].Count > 0)
-					SetStreams(TimedAudioStreamPlayerResource.SoundSets[CurrentSoundSet]);
+			if (TimedAudioStreamPlayerResource.SoundSets.TryGetValue(CurrentSoundSet, out Array<AudioStream> value))
+				if (value.Count > 0)
+					SetStreams(value);
 
 		if (TimedAudioStreamPlayerResource.Autoplay)
 			StartLoop();
